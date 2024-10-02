@@ -7,6 +7,8 @@ node_modules/
 .expo/
 dist/
 web-build/
+.expo-shared/
+
 
 # Native
 *.orig.*
@@ -34,4 +36,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 backend/.env
+backend/.env
+
+# Environment variables
+.env
 backend/.env
