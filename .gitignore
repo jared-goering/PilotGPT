@@ -38,6 +38,6 @@ yarn-error.*
 backend/.env
 backend/.env
 
-# Environment variables
-.env
+# Local environment files
+.env*
 backend/.env
