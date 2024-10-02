@@ -1,4 +1,3 @@
-// backend/openai.js
 const OpenAI = require('openai');
 const dotenv = require('dotenv');
 
@@ -17,15 +16,29 @@ async function initializeAssistant() {
     return { assistantId, vectorStoreId };
 }
 
-async function queryDocuments(assistantId, query, userId) {
-    const thread = await openai.beta.threads.create({
-        messages: [
-            {
-                role: "user",
-                content: query,
-            },
-        ],
-    });
+async function queryDocuments(assistantId, query, userId, threadId) {
+    let thread;
+    console.log('threadID', threadId)
+
+
+    if (threadId) {
+        // Retrieve and append to the existing thread
+        await openai.beta.threads.messages.create(threadId, {
+            role: "user",
+            content: query,
+        });
+        thread = await openai.beta.threads.retrieve(threadId);
+    } else {
+        // Create a new thread
+        thread = await openai.beta.threads.create({
+            messages: [
+                {
+                    role: "user",
+                    content: query,
+                },
+            ],
+        });
+    }
 
     return new Promise((resolve, reject) => {
         const stream = openai.beta.threads.runs.stream(thread.id, {
@@ -41,7 +54,7 @@ async function queryDocuments(assistantId, query, userId) {
             })
             .on("messageDone", () => {
                 console.log(responseText);
-                resolve({ answer: responseText });
+                resolve({ answer: responseText, threadId: thread.id });
             })
             .on("error", (error) => {
                 console.error('Error querying documents:', error);

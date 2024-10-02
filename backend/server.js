@@ -20,8 +20,8 @@ initialize();
 
 app.post('/query', async (req, res) => {
     try {
-        const { query, userId } = req.body;
-        const response = await queryDocuments(assistantId, query, userId);
+        const { query, userId, threadId } = req.body;
+        const response = await queryDocuments(assistantId, query, userId, threadId);
         res.json(response);
     } catch (error) {
         console.error('Error querying documents:', error);

@@ -1,58 +1,39 @@
-// src/HomeScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
-import axios from 'axios';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default function HomeScreen() {
-    const [query, setQuery] = useState('');
-    const [conversation, setConversation] = useState([]);
+export default function HomeScreen({ navigation }) {
     const [loading, setLoading] = useState(false);
     const userId = 'user123'; // You can dynamically generate or retrieve this from user context
-
-    const handleQuery = async () => {
-        if (!query.trim()) {
-            alert('Please enter a question.');
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await axios.post('http://localhost:3001/query', { query, userId });
-            const newMessage = {
-                role: 'assistant',
-                content: response.data.answer
-            };
-            setConversation([...conversation, { role: 'user', content: query }, newMessage]);
-            setQuery('');
-        } catch (error) {
-            console.error('Error querying documents:', error);
-            alert('Error querying documents');
-        }
-        setLoading(false);
-    };
+    const userName = 'Titik Ceria'; // Example user name
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>PilotGPT</Text>
-            <Spinner visible={loading} textContent={'Loading...'} textStyle={styles.spinnerText} />
-            <Text style={styles.subHeader}>Ask a Question</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your question"
-                value={query}
-                onChangeText={setQuery}
-            />
-            <Button title="Search" onPress={handleQuery} />
-            <ScrollView style={styles.resultsSection} contentContainerStyle={styles.scrollContainer}>
-                <Text style={styles.resultsHeader}>Conversation:</Text>
-                {conversation.map((msg, index) => (
-                    <View key={index} style={msg.role === 'user' ? styles.userMessage : styles.assistantMessage}>
-                        <Text style={styles.messageRole}>{msg.role === 'user' ? 'You' : 'Assistant'}:</Text>
-                        <Text style={styles.messageContent}>{msg.content}</Text>
+            <ImageBackground source={require('../assets/wave-pattern.png')} style={styles.background}>
+                <View style={styles.headerIcons}>
+                    <View style={styles.profileContainer}>
+                        <TouchableOpacity onPress={() => { /* Add your profile screen navigation here */ }}>
+                            <Image source={require('../assets/profile-icon.png')} style={styles.profileIcon} />
+                        </TouchableOpacity>
+                        <Text style={styles.userName}>{userName}</Text>
                     </View>
-                ))}
-            </ScrollView>
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                        <Image source={require('../assets/menu-icon.png')} style={styles.menuIcon} />
+                    </TouchableOpacity>
+                </View>
+                <Image source={require('../assets/full-logo.png')} style={styles.logo} />
+                <Spinner visible={loading} textContent={'Loading...'} textStyle={styles.spinnerText} />
+                <View style={styles.questionBox}>
+                    <Image source={require('../assets/chat-icon.png')} style={styles.chatIcon} />
+                    <Text style={styles.questionText}>Ask a new question</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+                        <View style={styles.chatButton}>
+                            <Text style={styles.chatButtonText}>Start New Chat</Text>
+                            <Text style={styles.arrow}>→</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
         </View>
     );
 }
@@ -60,65 +41,100 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1a1a1a',
+        backgroundColor: '#F5F5F5',
         alignItems: 'center',
-        padding: 20,
+        justifyContent: 'center',
     },
-    header: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#fff',
-        marginBottom: 20,
-    },
-    subHeader: {
-        fontSize: 24,
-        color: '#fff',
-        marginBottom: 10,
-    },
-    input: {
-        width: '100%',
-        padding: 10,
-        fontSize: 18,
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        marginBottom: 20,
-    },
-    resultsSection: {
+    background: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#2c2c2c',
-        padding: 20,
-        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    headerIcons: {
+        position: 'absolute',
+        top: 50,
+        left: 20,
+        right: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 30,
+    },
+    profileContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    menuIcon: {
+        width: 40,
+        height: 40,
+        resizeMode: 'contain',
+        marginRight: 10,
+        marginTop: 10,
+    },
+    profileIcon: {
+        width: 60,
+        height: 60,
+        resizeMode: 'contain',
+        marginLeft: -20,
+    },
+    userName: {
+        color: '#000',
+        fontSize: 16,
+        marginLeft: 10,
+        fontFamily: 'Inter-Bold', // Use static font for testing
+    },
+    logo: {
+        width: 300,
+        height: 100,
+        resizeMode: 'contain',
+        marginBottom: 100,
+    },
+    questionBox: {
+        position: 'absolute',
+        bottom: 50,
+        backgroundColor: '#000',
+        borderRadius: 24,
+        paddingVertical: 20,
+        paddingHorizontal: 30,
+        alignItems: 'center',
         marginTop: 20,
     },
-    scrollContainer: {
-        flexGrow: 1,
+    chatIcon: {
+        width: 40,
+        height: 40,
+        resizeMode: 'contain',
+        marginBottom: 20,
     },
-    resultsHeader: {
+    questionText: {
+        color: 'white',
         fontSize: 20,
-        color: '#fff',
-        marginBottom: 10,
+        marginBottom: 20,
+        fontFamily: 'Inter-Bold', // Use static font for testing
     },
-    userMessage: {
-        backgroundColor: '#d1e7dd',
-        padding: 10,
-        borderRadius: 5,
-        marginBottom: 10,
+    chatButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#A8E0BC',
+        borderRadius: 30,
+        paddingVertical: 20,
+        paddingHorizontal: 40, // Adjust this value to make the button wider
+        minWidth: 300, // Add this line to set a minimum width
+        justifyContent: 'center',
     },
-    assistantMessage: {
-        backgroundColor: '#f8d7da',
-        padding: 10,
-        borderRadius: 5,
-        marginBottom: 10,
-    },
-    messageRole: {
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    messageContent: {
+    chatButtonText: {
         color: '#000',
+        fontSize: 16,
+        fontFamily: 'Inter-Bold', // Use static font for testing
+    },
+    arrow: {
+        color: '#000',
+        fontSize: 16,
+        fontFamily: 'Inter-Bold', // Use static font for testing
+        marginLeft: 10,
     },
     spinnerText: {
         color: '#fff',
+        fontFamily: 'Inter-Regular', // Use static font for testing
     },
 });
