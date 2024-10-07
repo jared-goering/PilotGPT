@@ -29,6 +29,7 @@
       "expo-font",
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
+      "@react-native-google-signin/google-signin",
       "expo-build-properties",
       [
         "expo-build-properties",
@@ -38,7 +39,7 @@
           }
         }
       ]
-        ],
+    ],
     "extra": {
       "eas": {
         "projectId": "071a6056-8b58-44ed-818d-38b5365b2858"

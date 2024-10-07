@@ -20,7 +20,7 @@
       "ios": {
         "simulator": true
       }
-      }
+    }
   },
   "submit": {
     "production": {}
