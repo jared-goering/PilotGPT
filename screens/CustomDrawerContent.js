@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { auth } from "../firebaseConfig"; // Import Firebase auth
 import { useNavigation } from "@react-navigation/native"; // Import navigation hook
+import Icon from "react-native-vector-icons/MaterialIcons"; // Import the icons
+import Superwall from "@superwall/react-native-superwall"
 
 export default function CustomDrawerContent(props) {
   const navigation = useNavigation();
@@ -16,6 +18,17 @@ export default function CustomDrawerContent(props) {
     }
   };
 
+  const handleSubscribe = async () => {
+    try {
+        console.log("Subscription flow triggered.");
+      // Attempt to show the Superwall paywall
+      await Superwall.shared.register("show_paywall");
+      console.log("superwall finished")
+    } catch (error) {
+      console.error("Error triggering Superwall paywall: ", error);
+    }
+  };
+
   return (
     <DrawerContentScrollView
       {...props}
@@ -23,16 +36,23 @@ export default function CustomDrawerContent(props) {
     >
       <View style={styles.innerContainer}>
         <Text style={styles.menuTitle}>Menu</Text>
-        <DrawerItem label="Profile" onPress={() => {}} />
-        <DrawerItem label="Settings" onPress={() => {}} />
-        <DrawerItem label="Help Center" onPress={() => {}} />
+        <DrawerItem
+          label="Settings"
+          onPress={() => {}}
+          icon={() => <Icon name="settings" size={24} color="black" />} // Add icon here
+        />
+        <DrawerItem
+          label="Help Center"
+          onPress={() => {}}
+          icon={() => <Icon name="help-outline" size={24} color="black" />} // Add icon here
+        />
         <View style={styles.subscribeContainer}>
           <Text style={styles.subscribeTitle}>Subscribe Now</Text>
           <Text style={styles.subscribeText}>
             Unlock the benefits and elevate your experience with our premium
             subscription.
           </Text>
-          <TouchableOpacity style={styles.subscribeButton}>
+          <TouchableOpacity style={styles.subscribeButton} onPress={handleSubscribe}>
             <Text style={styles.subscribeButtonText}>Subscribe Now</Text>
           </TouchableOpacity>
         </View>
@@ -56,6 +76,7 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     fontSize: 24,
+    fontFamily: "Inter-Regular",
     marginBottom: 20,
   },
   subscribeContainer: {
@@ -67,10 +88,12 @@ const styles = StyleSheet.create({
   subscribeTitle: {
     fontSize: 18,
     color: "#fff",
+    fontFamily: "Inter-Regular",
     marginBottom: 10,
   },
   subscribeText: {
     color: "#fff",
+    fontFamily: "Inter-Regular",
     marginBottom: 20,
   },
   subscribeButton: {
@@ -80,6 +103,7 @@ const styles = StyleSheet.create({
   },
   subscribeButtonText: {
     textAlign: "center",
+    fontFamily: "Inter-Regular",
     color: "#000",
   },
   logoutButton: {

@@ -13,6 +13,8 @@ import SignupScreen from "./screens/SignupScreen";
 import { auth } from "./firebaseConfig"; // Correct import
 import Constants from "expo-constants";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Superwall from "@superwall/react-native-superwall"
+import { Platform } from "react-native"
 
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -77,6 +79,13 @@ export default function App() {
     });
 
     return () => unsubscribe(); // Clean up the listener on component unmount
+  }, []);
+
+  useEffect(() => {
+    const apiKey = Platform.OS === "ios" ? "pk_1bd834501bf2e5a76dcf2664806f45eacc1547fb2f03175d" : "MY_ANDROID_API_KEY"
+
+    Superwall.configure(apiKey)
+    console.log("Superwall configured")
   }, []);
 
   // useEffect(() => {
