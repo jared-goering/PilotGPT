@@ -10,11 +10,14 @@ import ChatScreen from "./screens/ChatScreen";
 import CustomDrawerContent from "./screens/CustomDrawerContent";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import PrivacyPolicyScreen from "./screens/PrivacyPolicyScreen";
+import SettingsModal from "./components/SettingsModal";
 import { auth } from "./firebaseConfig"; // Correct import
 import Constants from "expo-constants";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Superwall from "@superwall/react-native-superwall"
 import { Platform } from "react-native"
+
 
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -119,6 +122,8 @@ export default function App() {
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+            <Stack.Screen name="SettingsModal" component={SettingsModal} />
           </>
         )}
       </Stack.Navigator>

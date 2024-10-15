@@ -24,6 +24,7 @@ export default function ChatScreen({ navigation }) {
   const [conversation, setConversation] = useState([]);
   const [threadId, setThreadId] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const scrollViewRef = useRef();
 
   const QUESTION_LIMIT = 2; // Define your question limit here
